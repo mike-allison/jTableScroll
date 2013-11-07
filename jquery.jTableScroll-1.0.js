@@ -90,7 +90,7 @@
             $(outerdiv).append(bodydiv);
             $(outerdiv).append(footerdiv);                        
             
-            //Add vertical scrollbar div if needed after load
+            //Adjust header and footer div width if vertical scrollbar present
             
             var combinedHeight = $(this).height() + $(headerdiv).height() + $(footerdiv).height();            
             if (combinedHeight >= o.height) {
