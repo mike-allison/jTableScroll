@@ -25,9 +25,6 @@
         var scrollbarpx = 50 - $('<div>').height(99).appendTo(dummy).outerWidth();
         dummy.remove();
 
-        
-        console.log(scrollbarpx);
-
         return this.each(function () {
             var self = $(this);
             var parent = self.parent();
