@@ -1,5 +1,5 @@
 /*!
- * jTableScroll v.1.1
+ * jTableScroll v.1.1.1
  * http://mikeallisononline.com/
  *
  * Dependent on jquery
@@ -25,7 +25,7 @@
         var scrollbarpx = 50 - $('<div>').height(99).appendTo(dummy).outerWidth();
         dummy.remove();
 
-        return this.each(function () {
+        this.each(function () {
             var self = $(this);
             var parent = self.parent();
             
@@ -33,10 +33,12 @@
                 o.width = parent.width();
             if (!o.height)
                 o.height = parent.height();
+
+            //bypass if table size smaller than given dimesions
+            if (self.width() <= o.width && self.height() <= o.height)
+                return;
             
-            
-            
-            var width = self.width();
+            var width = self.width();                        
             self.width(width); //reinforce table width so it doesn't change dynamically 
             
             //Create outer div
@@ -55,26 +57,26 @@
             //Create header clone
             var cloneTable = self.clone();
             cloneTable.find('tbody').remove();
-            cloneTable.find('tfoot').remove();
-            cloneTable.width(width);            
-            cloneTable.css({ 'background-color': o.backgroundcolor });                                    
-
+            cloneTable.find('tfoot').remove();                        
+            
             //Create footer clone
             var cloneFoot = self.clone();
             cloneFoot.find('tbody').remove();
-            cloneFoot.find('thead').remove();
-            cloneFoot.width(width);
-            cloneFoot.css({ 'background-color': o.backgroundcolor });
-            //self.find('tfoot').hide(); //hide original footer
+            cloneFoot.find('thead').remove();                        
 
             //Set header/footer column widths
             self.find('thead').find('th').each(function (index, value) {
                 var val = $(value);
-                var tdwidth = val.width();
+                var tdwidth = val.width() ;
+                
                 val.css("width", tdwidth + 'px'); //reinforce width
                 $(cloneTable.find('th')[index]).width(tdwidth);
                 $(cloneFoot.find('td')[index]).width(tdwidth);
             });
+            
+            cloneTable.css({ 'table-layout': 'fixed', 'background-color': o.backgroundcolor });
+            cloneFoot.css({ 'table-layout': 'fixed', 'background-color': o.backgroundcolor });
+            self.css({ 'table-layout': 'fixed' });
 
             //Create body div
             var bodydiv = $(document.createElement('div'));            
