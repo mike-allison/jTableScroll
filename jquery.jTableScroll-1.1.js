@@ -1,5 +1,5 @@
 /*!
- * jTableScroll v.1.0.1
+ * jTableScroll v.1.1
  * http://mikeallisononline.com/
  *
  * Dependent on jquery
@@ -15,9 +15,19 @@
         o = $.extend({
             width: null,
             height: null,
-            scrollbarpx: null,
             backgroundcolor: null,
         }, o || {});
+        if (!o.backgroundcolor)
+            o.backgroundcolor = "#fff";
+
+        //get scrollbar size             
+        var dummy = $('<div>').css({ visibility: 'hidden', width: '50px', height:'50px', overflow: 'scroll' }).appendTo('body');
+        var scrollbarpx = 50 - $('<div>').height(99).appendTo(dummy).outerWidth();
+        dummy.remove();
+
+        
+        console.log(scrollbarpx);
+
         return this.each(function () {
             var self = $(this);
             var parent = self.parent();
@@ -26,10 +36,8 @@
                 o.width = parent.width();
             if (!o.height)
                 o.height = parent.height();
-            if (!o.scrollbarpx)
-                o.scrollbarpx = 17;
-            if (!o.backgroundcolor)
-                o.backgroundcolor = "#fff";
+            
+            
             
             var width = self.width();
             self.width(width); //reinforce table width so it doesn't change dynamically 
@@ -44,7 +52,7 @@
 
             //Create footer div
             var footerdiv = $(document.createElement('div'));
-            footerdiv.css({ 'overflow': 'hidden' }).width(o.width);
+            footerdiv.css({ 'overflow': 'hidden', 'position': 'relative', 'background-color': o.backgroundcolor }).width(o.width);
 
 
             //Create header clone
@@ -59,7 +67,8 @@
             cloneFoot.find('tbody').remove();
             cloneFoot.find('thead').remove();
             cloneFoot.width(width);
-            self.find('tfoot').hide(); //hide original footer
+            cloneFoot.css({ 'background-color': o.backgroundcolor });
+            //self.find('tfoot').hide(); //hide original footer
 
             //Set header/footer column widths
             self.find('thead').find('th').each(function (index, value) {
@@ -92,13 +101,15 @@
             
             var combinedHeight = self.height() + headerdiv.height() + footerdiv.height();            
             if (combinedHeight >= o.height) {
-                headerdiv.width(headerdiv.width() - o.scrollbarpx);
-                footerdiv.width(footerdiv.width() - o.scrollbarpx);
+                headerdiv.width(headerdiv.width() - scrollbarpx);
+                footerdiv.width(footerdiv.width() - scrollbarpx);
             }
             //Set body height after other content added to parent
             var marginTop = parseFloat(bodydiv.css("margin-top"));
             marginTop = marginTop - headerdiv.height();
-            bodydiv.css({ 'overflow': 'auto', "margin-top": marginTop + 'px' }).width(o.width).height(o.height - (footerdiv.height() + o.scrollbarpx));            
+            var marginBottom = parseFloat(bodydiv.css("margin-bottom"));
+            marginBottom = marginBottom - (footerdiv.height() + scrollbarpx);
+            bodydiv.css({ 'overflow': 'auto', 'margin-top': marginTop + 'px', 'margin-bottom': marginBottom + 'px' }).width(o.width).height(o.height - (footerdiv.height() + scrollbarpx));            
         });
     };
 })(jQuery);
