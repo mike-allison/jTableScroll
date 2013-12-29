@@ -1,5 +1,5 @@
 /*!
- * jTableScroll v.1.1.1
+ * jTableScroll v.1.2
  * http://mikeallisononline.com/
  *
  * Dependent on jquery
@@ -64,13 +64,15 @@
             cloneFoot.find('tbody').remove();
             cloneFoot.find('thead').remove();                        
 
-            //Set header/footer column widths
+            //Set header/footer column widths and click events
             self.find('thead').find('th').each(function (index, value) {
                 var val = $(value);
                 var tdwidth = val.width() ;
                 
                 val.css("width", tdwidth + 'px'); //reinforce width
+                $(cloneTable.find('th')[index]).click(function() { val.click(); });
                 $(cloneTable.find('th')[index]).width(tdwidth);
+                $(cloneFoot.find('th')[index]).click(function () { val.click(); });
                 $(cloneFoot.find('td')[index]).width(tdwidth);
             });
             
