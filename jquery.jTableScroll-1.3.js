@@ -1,5 +1,5 @@
 /*!
- * jTableScroll v.1.3
+ * jTableScroll v.1.4
  * http://mikeallisononline.com/
  *
  * Dependent on jquery
@@ -18,8 +18,6 @@
             backgroundcolor: null,
             headerCss: null,
         }, o || {});
-        if (!o.backgroundcolor)
-            o.backgroundcolor = "#fff";
 
         //get scrollbar size             
         var dummy = $('<div>').css({ visibility: 'hidden', width: '50px', height:'50px', overflow: 'scroll' }).appendTo('body');
@@ -74,22 +72,31 @@
             //Create footer clone
             var cloneFoot = self.clone();
             cloneFoot.find('tbody').remove();
-            cloneFoot.find('thead').remove();                        
+            cloneFoot.find('thead').remove();
 
+            var headBgColor = null;            
             //Set header/footer column widths and click events
-            self.find('thead').find('th').each(function (index, value) {
-                var val = $(value);
-                var tdwidth = val.width() ;
-                
-                val.css("width", tdwidth + 'px'); //reinforce width
-                $(cloneTable.find('th')[index]).click(function() { val.click(); });
-                $(cloneTable.find('th')[index]).width(tdwidth);
-                $(cloneFoot.find('th')[index]).click(function () { val.click(); });
-                $(cloneFoot.find('td')[index]).width(tdwidth);
+            self.find('thead').find('th').each(function(index, value) {
+              var val = $(value);
+              var tdwidth = val.width();
+              if (headBgColor == null) {
+                if (o.backgroundcolor == null)
+                  headBgColor = val.bkgcolor();
+                else
+                  headBgColor = o.backgroundcolor;
+              }
+              if (headBgColor == "rgba(0, 0, 0, 0)" || headBgColor == "transparent")
+                headBgColor = "#fff";                             
+
+              val.css("width", tdwidth + 'px'); //reinforce width
+              $(cloneTable.find('th')[index]).click(function() { val.click(); });
+              $(cloneTable.find('th')[index]).width(tdwidth);
+              $(cloneFoot.find('th')[index]).click(function () { val.click(); });
+              $(cloneFoot.find('td')[index]).width(tdwidth);
             });
             
-            cloneTable.css({ 'table-layout': 'fixed', 'background-color': o.backgroundcolor });
-            cloneFoot.css({ 'table-layout': 'fixed', 'background-color': o.backgroundcolor });
+            cloneTable.css({ 'table-layout': 'fixed', 'background-color': headBgColor });
+            cloneFoot.css({ 'table-layout': 'fixed', 'background-color': headBgColor });
             self.css({ 'table-layout': 'fixed' });
 
             //Create body div
@@ -130,3 +137,23 @@
     };
 })(jQuery);
 
+
+(function($) {
+  // Get this browser's take on no fill
+  // Must be appended else Chrome etc return 'initial'
+  var $temp = $('<div style="background:none;display:none;"/>').appendTo('body');
+  var transparent = $temp.css('backgroundColor');
+  $temp.remove();
+
+  jQuery.fn.bkgcolor = function( fallback ) {
+    function test( $elem ) {
+        if ( $elem.css('backgroundColor') == transparent ) {
+          return !$elem.is('body') ? test( $elem.parent() ) : fallback || transparent ;
+        } else {
+          return $elem.css('backgroundColor');
+        }
+    }
+    return test( $(this) );
+};
+
+})(jQuery);
