@@ -1,5 +1,5 @@
 /*!
- * jTableScroll v.1.4
+ * jTableScroll v.1.4.1
  * http://mikeallisononline.com/
  *
  * Dependent on jquery
@@ -59,11 +59,6 @@
             if (o.headerCss)
               headerdiv.addClass(o.headerCss);
 
-            //Create footer div
-            var footerdiv = $(document.createElement('div'));
-            footerdiv.css({ 'overflow': 'hidden', 'position': 'relative', 'background-color': o.backgroundcolor }).width(o.width);
-
-
             //Create header clone
             var cloneTable = self.clone();
             cloneTable.find('tbody').remove();
@@ -95,6 +90,10 @@
               $(cloneFoot.find('td')[index]).width(tdwidth);
             });
             
+            //Create footer div
+            var footerdiv = $(document.createElement('div'));
+            footerdiv.css({ 'overflow': 'hidden', 'position': 'relative', 'background-color': headBgColor }).width(o.width);
+
             cloneTable.css({ 'table-layout': 'fixed', 'background-color': headBgColor });
             cloneFoot.css({ 'table-layout': 'fixed', 'background-color': headBgColor });
             self.css({ 'table-layout': 'fixed' });
