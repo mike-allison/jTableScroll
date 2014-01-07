@@ -1,5 +1,5 @@
 /*!
- * jTableScroll v.1.2
+ * jTableScroll v.1.3
  * http://mikeallisononline.com/
  *
  * Dependent on jquery
@@ -16,6 +16,7 @@
             width: null,
             height: null,
             backgroundcolor: null,
+            headerCss: null,
         }, o || {});
         if (!o.backgroundcolor)
             o.backgroundcolor = "#fff";
@@ -25,6 +26,15 @@
         var scrollbarpx = 50 - $('<div>').height(99).appendTo(dummy).outerWidth();
         dummy.remove();
 
+        //IE8 browser test (because it's bad)
+        var rv = -1;
+        var ua = navigator.userAgent;
+        var re = new RegExp("Trident\/([0-9]{1,}[\.0-9]{0,})");
+        if (re.exec(ua) != null) {
+          rv = parseFloat(RegExp.$1);
+        }
+        var ie8 = (rv == 4);
+        
         this.each(function () {
             var self = $(this);
             var parent = self.parent();
@@ -47,7 +57,9 @@
             
             //Create header div
             var headerdiv = $(document.createElement('div'));
-            headerdiv.css({ 'overflow': 'hidden' , 'position': 'relative' }).width(o.width);
+            headerdiv.css({ 'overflow': 'hidden', 'position': 'relative' }).width(o.width);
+            if (o.headerCss)
+              headerdiv.addClass(o.headerCss);
 
             //Create footer div
             var footerdiv = $(document.createElement('div'));
@@ -110,7 +122,11 @@
             marginTop = marginTop - headerdiv.height();
             var marginBottom = parseFloat(bodydiv.css("margin-bottom"));
             marginBottom = marginBottom - (footerdiv.height() + scrollbarpx);
-            bodydiv.css({ 'overflow': 'auto', 'margin-top': marginTop + 'px', 'margin-bottom': marginBottom + 'px' }).width(o.width).height(o.height - (footerdiv.height() + scrollbarpx));            
+            bodydiv.css({ 'overflow': 'auto', 'margin-top': marginTop + 'px', 'margin-bottom': marginBottom + 'px' }).width(o.width).height(o.height - (footerdiv.height() + scrollbarpx));
+
+            if (ie8)
+              self.find('thead').hide();
         });
     };
 })(jQuery);
+
