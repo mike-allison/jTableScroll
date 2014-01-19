@@ -1,5 +1,5 @@
 /*!
- * jTableScroll v.1.5
+ * jTableScroll v.1.5.1
  * http://mikeallisononline.com/
  *
  * Dependent on jquery
@@ -141,9 +141,9 @@
                 if (o.width && newWidth > o.width)
                   return;
                 outerdiv.css({ 'overflow': 'hidden' }).width(newWidth).height(divHeight);
-                headerdiv.css({ 'overflow': 'hidden', 'position': 'relative' }).width(newWidth);
+                headerdiv.css({ 'overflow': 'hidden', 'position': 'relative' }).width(newWidth - scrollbarpx);
                 bodydiv.css({ 'overflow': 'auto', 'margin-top': marginTop + 'px', 'margin-bottom': marginBottom + 'px' }).width(newWidth).height(divHeight - scrollbarpx);
-                footerdiv.css({ 'overflow': 'hidden', 'position': 'relative', 'background-color': headBgColor }).width(newWidth);
+                footerdiv.css({ 'overflow': 'hidden', 'position': 'relative', 'background-color': headBgColor }).width(newWidth - scrollbarpx);
                 prevParentWidth = newWidth;
               }
             });
