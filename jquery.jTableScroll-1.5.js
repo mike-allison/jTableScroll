@@ -1,5 +1,5 @@
 /*!
- * jTableScroll v.1.4.1
+ * jTableScroll v.1.5
  * http://mikeallisononline.com/
  *
  * Dependent on jquery
@@ -12,12 +12,13 @@
 
 (function ($) {
     $.fn.jTableScroll = function (o) {
-        o = $.extend({
-            width: null,
-            height: null,
-            backgroundcolor: null,
-            headerCss: null,
-        }, o || {});
+      o = $.extend({
+          width: null,
+          height: null,
+          backgroundcolor: null,
+          headerCss: null,
+          reactive: true,
+    }, o || {});
 
         //get scrollbar size             
         var dummy = $('<div>').css({ visibility: 'hidden', width: '50px', height:'50px', overflow: 'scroll' }).appendTo('body');
@@ -32,18 +33,17 @@
           rv = parseFloat(RegExp.$1);
         }
         var ie8 = (rv == 4);
-        
+                
         this.each(function () {
             var self = $(this);
             var parent = self.parent();
-            
-            if (!o.width)
-                o.width = parent.width();
-            if (!o.height)
-                o.height = parent.height();
+            var prevParentWidth = parent.width();
+            var divWidth = parseInt(o.width ? o.width : parent.width());
+            var divHeight = parseInt(o.height ? o.height : parent.height());
+          console.log(divHeight);
 
             //bypass if table size smaller than given dimesions
-            if (self.width() <= o.width && self.height() <= o.height)
+            if (self.width() <= divWidth && self.height() <= divHeight)
                 return;
             
             var width = self.width();                        
@@ -51,11 +51,11 @@
             
             //Create outer div
             var outerdiv = $(document.createElement('div'));
-            outerdiv.css({ 'overflow': 'hidden' }).width(o.width).height(o.height);
+            outerdiv.css({ 'overflow': 'hidden' }).width(divWidth).height(divHeight);
             
             //Create header div
             var headerdiv = $(document.createElement('div'));
-            headerdiv.css({ 'overflow': 'hidden', 'position': 'relative' }).width(o.width);
+            headerdiv.css({ 'overflow': 'hidden', 'position': 'relative' }).width(divWidth);
             if (o.headerCss)
               headerdiv.addClass(o.headerCss);
 
@@ -92,7 +92,7 @@
             
             //Create footer div
             var footerdiv = $(document.createElement('div'));
-            footerdiv.css({ 'overflow': 'hidden', 'position': 'relative', 'background-color': headBgColor }).width(o.width);
+            footerdiv.css({ 'overflow': 'hidden', 'position': 'relative', 'background-color': headBgColor }).width(divWidth);
 
             cloneTable.css({ 'table-layout': 'fixed', 'background-color': headBgColor });
             cloneFoot.css({ 'table-layout': 'fixed', 'background-color': headBgColor });
@@ -128,10 +128,27 @@
             marginTop = marginTop - headerdiv.height();
             var marginBottom = parseFloat(bodydiv.css("margin-bottom"));
             marginBottom = marginBottom - (footerdiv.height() + scrollbarpx);
-            bodydiv.css({ 'overflow': 'auto', 'margin-top': marginTop + 'px', 'margin-bottom': marginBottom + 'px' }).width(o.width).height(o.height - (footerdiv.height() + scrollbarpx));
+            bodydiv.css({ 'overflow': 'auto', 'margin-top': marginTop + 'px', 'margin-bottom': marginBottom + 'px' }).width(divWidth).height(divHeight - scrollbarpx);
 
             if (ie8)
               self.find('thead').hide();
+
+          //Add reactive resizing
+          if (o.reactive) {
+            $(window).resize(function () {
+              if (prevParentWidth != parent.width()) {
+                var newWidth = parent.width();
+                if (o.width && newWidth > o.width)
+                  return;
+                outerdiv.css({ 'overflow': 'hidden' }).width(newWidth).height(divHeight);
+                headerdiv.css({ 'overflow': 'hidden', 'position': 'relative' }).width(newWidth);
+                bodydiv.css({ 'overflow': 'auto', 'margin-top': marginTop + 'px', 'margin-bottom': marginBottom + 'px' }).width(newWidth).height(divHeight - scrollbarpx);
+                footerdiv.css({ 'overflow': 'hidden', 'position': 'relative', 'background-color': headBgColor }).width(newWidth);
+                prevParentWidth = newWidth;
+              }
+            });
+          }
+
         });
     };
 })(jQuery);
