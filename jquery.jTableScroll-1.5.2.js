@@ -17,7 +17,7 @@
           height: null,
           backgroundcolor: null,
           headerCss: null,
-          reactive: true,
+          reactive: true
     }, o || {});
 
         //get scrollbar size             
