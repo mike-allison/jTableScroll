@@ -129,7 +129,7 @@
             var marginBottom = parseFloat(bodydiv.css("margin-bottom"));
             marginBottom -= footerdiv.height();
             if (self.width() + scrollbarpx >= divWidth)
-                marginBottom += scrollbarpx;
+                marginBottom -= scrollbarpx;
             bodydiv.css({ 'overflow': 'auto', 'margin-top': marginTop + 'px', 'margin-bottom': marginBottom + 'px' }).width(divWidth).height(divHeight - scrollbarpx);
 
             if (ie8)

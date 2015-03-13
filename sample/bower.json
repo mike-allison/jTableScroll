@@ -1,0 +1,8 @@
+{
+    "name": "jTableScroll-sample",
+    "version": "1.6.0",
+    "main": "index.html",
+    "dependencies": {
+        "jquery": "~2.1.0"
+    }
+}
