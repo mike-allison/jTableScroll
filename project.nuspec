@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>jTableScroll</id>
+        <version>1.6.0</version>
+        <authors>Mike Allison</authors>
+        <owners>mikeallison</owners>
+        <projectUrl>http://mikeallisononline.com</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>An easy to implement jQuery extension that simplifies adding both horizontal and vertical scrolling with static header and footer to any html table. It will automatically (and reactively) size to it's parent container, or a given set of dimensions.</description>
+        <summary>An easy to implement jQuery extension that simplifies adding both horizontal and vertical scrolling with static header and footer to any html table.</summary>
+        <copyright>Mike Allison 2013</copyright>
+        <tags>jquery table scroll scrolling static header footer scroller</tags>
+        <dependencies>
+            <dependency id="jquery" version="1.9.0" />
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="jQuery.jTableScroll.js" target="Content\Scripts" />
+    </files>
+
+</package>
