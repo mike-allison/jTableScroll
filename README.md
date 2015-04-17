@@ -55,7 +55,7 @@ MIT
 ```
 
 ## Options (JSON object)
-```javascripts
+```javascript
 {
     reactive: (bool)(optional)(default: true) enable reactive sizing to parent control
     width: (int)(optional) desired max width in pixels
