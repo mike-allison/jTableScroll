@@ -4,7 +4,7 @@ A powerful jQuery extension that automates scrolling and fixed headers and foote
 By default it will size a table to it's parent container, fix the position of the header and footer, add horizontal and vertical scrolling as needed, and resize reactively to window resize events.
 
 ## Homepage & Demo
-http://mikeallisononline.com/Projects/jquery/jTableScroll/
+http://mikeallisononline.com/Projects/jTableScroll/
 
 ## Install
 ```
